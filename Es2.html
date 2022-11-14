@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maggiore della somma precendente</title>
+    <style>
+        table,th, td {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <p id="maggiori"></p>
+    <table border-size="1px" id="tab">
+        <thead>
+        <tr>
+            <th>cont</th>
+            <th>num</th>
+            <th>somma</th>
+            <th>mas</th>
+        </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <script>
+        let n= Number(prompt("Quanti numeri vuoi inserire? "));
+        let cont=0;
+        let somma=0;
+        let mas=[];
+        let si="si";
+        let no="no"
+        const numeri = [];
+        const maggiore=[];
+        for(let i=0;i<n;i++) {
+             do{
+                num=Number(prompt("Inserire n "))
+                if(isNaN(num))
+                    alert("Non hai inserito un numero");
+                else                    
+                    numeri[i]=num;
+                    somma=numeri[i-1]+num;
+                    if(num>somma)
+                        mas.push(si)
+                        maggiore.push(num);
+                    if(somma>num)
+                        mas.push(no);
+                    cont+=1;
+             }while(isNaN(num));
+            let t=document.getElementById("tab");
+            let tbody=t.children[1];
+            const tr=document.createElement("tr");
+            let td=document.createElement("td");
+            td.innerText=`${cont}`;
+            tr.appendChild(td);
+            td=document.createElement("td");
+            td.innerText=`${num}`;
+            tr.appendChild(td);
+            td=document.createElement("td");
+            td.innerText=`${somma}`;
+            tr.appendChild(td);
+            td=document.createElement("td");
+            td.innerText=`${mas}`;
+            tr.appendChild(td);
+         }
+         document.getElementById("maggiori").value="I numeri maggiori della somma dei numeri precedenti sono: "+maggiore.value;  
+         document.getElementById(table).value="";
+    </script>
+</body>
+</html>
