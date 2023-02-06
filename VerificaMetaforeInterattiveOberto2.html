@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <title> Verifica metafore interattive 2 Oberto </title>
+</head>
+<div>
+    <p id="narrazione"></p>
+</div>
+
+<form>
+    <div class="form-group">
+        <label for="exampleInputEmail1">Autista</label>
+        <input type="text" class="form-control" id="autista"  oninput="Stringa()" placeholder="SOGGETTO protagonista">
+    </div>
+    <div class="form-group">
+        <label for="exampleInputPassword1">Destinazione</label>
+        <input type="text" class="form-control" id="destinazione" oninput="Stringa()" placeholder="OBIETTIVO da raggiungere">
+    </div>
+    <div class="form-group">
+        <label for="exampleInputPassword1">Carburante</label>
+        <input type="text" class="form-control" id="carburante" oninput="Stringa()" placeholder="MOTIVAZIONE che spinge verso l'obiettivo">
+    </div>
+    <div class="form-group">
+        <label for="exampleInputPassword1">Luogo</label>
+        <input type="text" class="form-control" id="luogo" oninput="Stringa()" placeholder="CONTESTO in cui si svolge l'azione">
+    </div>
+    <div class="form-group">
+        <label for="exampleInputPassword1">Strada</label>
+        <input type="text" class="form-control" id="strada" oninput="Stringa()" placeholder="COMPORTAMENTO">
+    </div>
+    <div class="form-group">
+        <label for="exampleInputPassword1">Strada OK</label>
+        <input type="text" class="form-control" id="stradaOK" oninput="Stringa()" placeholder="COMPORTAMENTO ADEGUATO per reagire ad oppressione ">
+    </div>
+    <div class="form-group">
+        <label for="exampleInputPassword1">Strada KO</label>
+        <input type="text" class="form-control" id="stradaKO" oninput="Stringa()" placeholder="COMPORTAMENTO INADEGUATO per reagire ad oppressione">
+    </div>
+    <div class="form-group">
+        <label for="exampleInputPassword1">Cespugli</label>
+        <input type="text" class="form-control" id="cespugli" oninput="Stringa()" placeholder="FEEDBACK">
+    </div>
+    
+    <div class="form-group">
+        <label for="exampleInputPassword1">Lupo</label>
+        <input type="text" class="form-control" id="lupo" oninput="Stringa()" placeholder="CONSEGUENZE NEGATIVE del comportamento inadeguato ">
+    </div>
+    <div class="form-group">
+        <label for="exampleInputPassword1">Cestino</label>
+        <input type="text" class="form-control" id="cestino" oninput="Stringa()" placeholder="ATTACCAMENTI da lasciare andare ">
+    </div>
+    <div class="form-group">
+        <label for="exampleInputPassword1">Distanza</label>
+        <input type="int" class="form-control" id="distanza" disabled value="3">
+    </div>
+</form>
+    <center>
+        <div id="immagini"></div>
+        <input type="button" value="INIZIO" id="inizio" onClick="inizio()" class="btn"><br>
+        <br><input type="button" value="  " id="btnSx" onClick="bottoneSx()" class="btn">
+        <input type="button" value="  " id="btnDx" onClick="bottoneDx()" class="btn">
+        <br><h5> N@arrazione </h5>
+        <div class="form-group">
+            <textarea class="form-control" id="myTextarea"  disabled value="" rows="3"></textarea>
+        </div>
+    </center>
+<script>
+     var cont=1;
+     var contSi=0, contNo=0,autista, destinazione, carburante, luogo, strada, stradaOK, stradaKO, cespugli, motivato=0, distanza,lupo,cestino;
+
+     function myFunction() {
+            document.getElementById("myTextarea").value+="\n"+cont;
+            cont++;
+            document.getElementById("myTextarea").scrollTop=document.getElementById("myTextarea").scrollHeight;
+        }
+    
+     function popUp(pagina){
+            window.open(pagina,'','width=560, height=390, left=500, top=100, resizable=yes, toolbar=no, scrollbars=no, status=no');
+        }
+
+    function inizio(){
+        distanza=document.getElementById("distanza").value;
+        document.getElementById("myTextarea").value+="Distanza iniziale dall'obbiettivo: "+distanza+"\n";
+
+        if(document.getElementById("autista").value=="")
+            autista=`SOGGETTO`;
+        else
+            autista=document.getElementById("autista").value;  
+
+        if(document.getElementById("destinazione").value=="")
+            destinazione=`OBIETTIVO`;
+        else
+            destinazione=document.getElementById("destinazione").value;
+
+        if(document.getElementById("carburante").value=="")
+            carburante=`MOTIVAZIONE`;
+        else
+            carburante=document.getElementById("carburante").value;
+
+        if(document.getElementById("luogo").value=="")
+            luogo=`CONTESTO`;
+        else
+            luogo=document.getElementById("luogo").value;
+
+        if(document.getElementById("strada").value=="")
+            strada=`COMPORTAMENTO `;
+        else
+            strada=document.getElementById("strada").value;
+
+        if(document.getElementById("stradaOK").value=="")
+            stradaOK=`COMPORTAMENTO ADEGUATO`;
+        else
+            stradaOK=document.getElementById("stradaOK").value;
+
+        if(document.getElementById("stradaKO").value=="")
+            stradaKO=`COMPORTAMENTO INADEGUATO`;
+        else
+            stradaKO=document.getElementById("stradaKO").value;
+
+        if(document.getElementById("cespugli").value=="")
+            cespugli=`FEEDBACK`;
+        else
+            cespugli=document.getElementById("cespugli").value;
+            
+        if(document.getElementById("lupo").value=="")
+            lupo=`CONSEGUENZE NEGATIVE`;
+        else
+            lupo=document.getElementById("lupo").value;
+            
+        if(document.getElementById("cestino").value=="")
+            cestino=`ATTACCAMENTI`;
+        else
+            cestino=document.getElementById("cestino").value;
+            
+        document.getElementById("myTextarea").value+=autista+" vuoi raggiungere "+destinazione+" ?";
+        document.getElementById("btnSx").value="No";
+        document.getElementById("btnDx").value="Sì";
+           
+    }
+
+    function bottoneSx(){
+                document.getElementById("myTextarea").scrollTop=document.getElementById("myTextarea").scrollHeight;
+                if(motivato==0) {
+                    document.getElementById("myTextarea").value+="No"+"\n";
+                    document.getElementById("myTextarea").value+="Mancando  "+carburante+" per raggiungere "+destinazione+", "+autista+" nel contesto "+luogo+" non raggiungerai l'obbiettivo!"+"\n";
+                    document.getElementById("myTextarea").value+=autista+" vuoi raggiungere "+destinazione+" ?";
+                }
+                else if(motivato==1){
+                    document.getElementById("myTextarea").value+="ATTENZIONE "+ autista+" la scelta "+document.getElementById("btnSx").value+" ti allontana dall'obiettivo! \n";
+                    document.getElementById("myTextarea").value+=cespugli+ " ti segnalano il pericolo! \n";
+                    distanza++;
+                    if(distanza<8){
+                        document.getElementById("myTextarea").value+="Distanza attuale dall'obbiettivo: "+distanza+"\n";
+                        document.getElementById("myTextarea").value+=autista+" quale comportamento scegli?"+"\n";
+                        src.removeChild(img);
+                    }
+                    else{
+                        document.getElementById("myTextarea").value+=autista+" :( ti sei allontanato troppo hai scelto la strada chiusa "+document.getElementById("btnSx").value+" e ti sei scontrato con "+lupo+"\n";
+                        document.getElementById("myTextarea").value+=autista+" per risolvere la situazione devi abbandonare i tuoi "+ cestino + "così da avvicinarti a "+ destinazione+"\n"
+                        popUp("https://www.umanetexpo.net/expo2015Server/UECDL/U-ECDL/img/PaginaTopolinoTontolino.htm");
+                        distanza=6;
+                    }
+                }
+            }
+            function bottoneDx(){
+            document.getElementById("myTextarea").scrollTop=document.getElementById("myTextarea").scrollHeight;
+            if(motivato==0){
+                document.getElementById("myTextarea").value+="Sì"+"\n";
+                document.getElementById("myTextarea").value+=autista+" quale comportamento scegli?"+"\n";
+                document.getElementById("btnSx").value="COMPORTAMENTO INADEGUATO";
+                document.getElementById("btnDx").value="COMPORTAMENTO ADEGUATO";
+                motivato++;
+            }
+            else if(motivato==1) {
+                document.getElementById("myTextarea").value+=autista+" la scelta "+document.getElementById("btnDx").value+" ti avvicina a " + destinazione+" continua così"+"\n";
+                distanza--;
+                if(distanza>0){
+                    document.getElementById("myTextarea").value+="Distanza attuale dall'obbiettivo: "+distanza+"\n";
+                    document.getElementById("myTextarea").value+=autista+" la scelta "+document.getElementById("btnDx").value+" ti avvicina a " + destinazione+" continua così"+"\n";
+                    document.getElementById("myTextarea").value+=autista+" quale comportamento scegli?"+"\n";
+                }
+                else if(distanza==0){
+                    document.getElementById("myTextarea").value+="Distanza attuale dall'obbiettivo: "+distanza+"\n";
+                    document.getElementById("myTextarea").value+="Coraggio ci sei quasi fai l'ultimo passo!"+"\n";
+                }
+                else{
+                    popUp("https://www.umanetexpo.net/expo2015Server/UECDL/U-ECDL/img/PaginaTopolinoVolpino.htm");
+                    document.getElementById("myTextarea").value+=":) COMPLIMENTI"+ autista+" hai raggiunto "+ destinazione+"\n";
+                    distanza=0;
+                    
+                }
+            }
+        }
+    </script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>
