@@ -3,26 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Api spotify</title>
 </head>
 <body>
     <table  border="1">
-        <tbody id="tbody">
-        </tbody>
-    </table> 
+        <tr>
+            <th>Autore</th>
+            <th>Titolo</th>
+            <th>Copertina</th>
+            <th>Scegli Canzone</th>
+        </tr>
+        <tr id="albumTableRow">
+
+        </tr>
+    </table>
+
+    <div id="spotifyPlayer"></div>
+        
     <script>
-        var access_token="BQDqNx2L86hTx0ZoYRJglkmcvnGkEfexpaYUL2MlDen0H4oCA-HG9mKGKbFd-rug88pKKOwozyc8sGhkQHHuBhuvDMgeRJuBuvIOv6rx43ZX5ynakIq9mx3zRT8etqUfFV_y8gBDcb87-I_OzxUmkUYXEl-I936K3UYAd2tBN2PRFlqUsQdI2RM2SVCz_QdIG5bNVKI2DL3nB9IJvC2QQPD0";
-        var album_id= "298TPucavaqMuiInBsW7jX";
+        var access_token="BQDby7poYeTs0yaIdNOE_xD_0ZwjU6oHBBj6LFTRZAuds1SBuoQYsLWH5dFBySXM4YHZJRBho0lx4B-btLKVqmvUo-WfqIfIze4TNjsEOMh9j8E6HwaKkgPndVvsQsB8j8IXVVDS5qqtFCIOo30pzBgdItPH2LL6g3HC6n3wl7Js2DPRbLRkPX0Em1czba6CHkz6dEcYtDMwoC0fBAr8iu8h";
+        var album_id= "5wkMFvIDpangGWrSkBmq2M";
 
         async function fetchAlbumData(){
             try{
-                const response = await fetch(`https://api.spotify.com/v1/albums/${album_id}`,{
+                const response = await fetch(`https://api.spotify.com/v1/albums/${album_id}`, {
                     headers: {
-                        'Authorization' : 'Bearer' + access_token
+                        'Authorization' : `Bearer ${access_token}`
                     }
                 });
                 if(!response.ok){
-                    throw new Error('Errore nella richiesta' + response.status);
+                    throw new Error(`Errore nella richiesta ${response.status}`);
                 }
                 const userData = await response.json();
                 return userData;
@@ -35,12 +45,55 @@
         async function renderTable(){
             try{
                 const jsonAlbumData = await fetchAlbumData();
-                let tbody="";
+                const jsonArtistData = jsonAlbumData.artists[0].name;
+                const jsonAlbumTitle = jsonAlbumData.name;
+                const jsonAlbumCover = jsonAlbumData.images[0].url;
+ 
                 let riga;
-                console.log(jsonAlbumData)
-                console.log(jsonAlbumData["artist"][0]["name"])
+                
+                let tbody = "";
+                riga += "<tr>"
+                tbody += "<td>" + jsonArtistData + "</td>";
+                tbody += "<td>" + jsonAlbumTitle + "</td>";
+                tbody += `<td><img src="${jsonAlbumCover}" alt="Copertina Album" width="50"></td>`;
+                riga += "</tr>"
+                
+                const jsonTableRow = document.getElementById('albumTableRow');
+                jsonTableRow.innerHTML = tbody;
+
+                const jsonTracks = jsonAlbumData.tracks.items;
+                let selectHtml = '<select onchange="playSelectedSong(this)">';
+                selectHtml += '<option value="">Seleziona una canzone</option>';
+                jsonTracks.forEach(track => {
+                    selectHtml += `<option value="${track.id}">${track.name}</option>`;
+                });
+                selectHtml += '</select>';
+
+                const selectCell = document.createElement('td');
+                selectCell.innerHTML = selectHtml;
+                jsonTableRow.appendChild(selectCell);
+
             } catch(error){
                 console.error('Errore durante il rendering: ', error);
+            }
+        }
+
+        async function playSong(selectElement) {
+            const songId = selectElement.value;
+            const player = document.getElementById('spotifyPlayer');
+
+            if (songId) {
+                const playerHtml = `
+                    <div>
+                        <p>Stai ascoltando:</p>
+                        <iframe src="https://open.spotify.com/embed/track/${songId}"
+                                width="300" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media">
+                        </iframe>
+                    </div>
+                `;
+                player.innerHTML = playerHtml;
+            } else {
+                player.innerHTML = '';
             }
         }
         renderTable();
