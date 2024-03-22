@@ -21,7 +21,7 @@
     <div id="spotifyPlayer"></div>
         
     <script>
-        var access_token="BQDby7poYeTs0yaIdNOE_xD_0ZwjU6oHBBj6LFTRZAuds1SBuoQYsLWH5dFBySXM4YHZJRBho0lx4B-btLKVqmvUo-WfqIfIze4TNjsEOMh9j8E6HwaKkgPndVvsQsB8j8IXVVDS5qqtFCIOo30pzBgdItPH2LL6g3HC6n3wl7Js2DPRbLRkPX0Em1czba6CHkz6dEcYtDMwoC0fBAr8iu8h";
+        var access_token="BQAEdQLMMp4Zvh6G3Pc1mAicwuc-4VKSUPM7FJvbCkoI6gWeB-XujG824X9DxiQVvasUdZKQHGaEg3SOoS1nHFUUwni82Az-96wPEL01697X2p9Od9Ok0HGLVFuDo5T--XX7rYVSzET-r47DuBL4IVWR-pD3HgE4zNqpeylSUCcLr2WgcZkvuoIH5WMM7qmjEMQ_3FNGS3u46GuOUEsrn3W-";
         var album_id= "5wkMFvIDpangGWrSkBmq2M";
 
         async function fetchAlbumData(){
@@ -47,23 +47,19 @@
                 const jsonAlbumData = await fetchAlbumData();
                 const jsonArtistData = jsonAlbumData.artists[0].name;
                 const jsonAlbumTitle = jsonAlbumData.name;
-                const jsonAlbumCover = jsonAlbumData.images[0].url;
- 
+                const jsonAlbumCover = jsonAlbumData.images[0].url; 
                 let riga;
                 
                 let tbody = "";
-                riga += "<tr>"
                 tbody += "<td>" + jsonArtistData + "</td>";
                 tbody += "<td>" + jsonAlbumTitle + "</td>";
                 tbody += `<td><img src="${jsonAlbumCover}" alt="Copertina Album" width="50"></td>`;
-                riga += "</tr>"
                 
                 const jsonTableRow = document.getElementById('albumTableRow');
                 jsonTableRow.innerHTML = tbody;
 
                 const jsonTracks = jsonAlbumData.tracks.items;
-                let selectHtml = '<select onchange="playSelectedSong(this)">';
-                selectHtml += '<option value="">Seleziona una canzone</option>';
+                let selectHtml = '<select onchange="playSong(this)">';
                 jsonTracks.forEach(track => {
                     selectHtml += `<option value="${track.id}">${track.name}</option>`;
                 });
