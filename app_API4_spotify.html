@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Api spotify</title>
+</head>
+<body>
+    <table  border="1" id="albumTableRow">
+  
+    </table>
+
+    <div id="Album"></div>
+    <div id="spotifyPlayer"></div>
+    <div id="albumPlayer"></div>
+ 
+        
+    <script>
+        var access_token="BQBV0A3daqiXIvSMIK0c9kfNEEflbnE5UaZvu8CWVrm2SwAbxu9vWXa53O2lZixzPoPR0r3k1_ooWQ27ZyV-6qz0SXbaYVE24LL04HCa_JwW2pPkIK6XSQ3s64w2p0GLSQQdQYyKTeG-uvl3PsDRc9ZrWen_crA7LaP85ZySz8sEzWdPcqoed1Cr1pGQ2sNl7V2jIHSw6riIDQCLe7h3nNaB";
+        async function fetchAlbumData(){
+            try{
+                const response = await fetch(`https://api.spotify.com/v1/me/player/recently-played`, {
+                    headers: {
+                        'Authorization' : `Bearer ${access_token}`
+                    }
+                });
+                if(!response.ok){
+                    throw new Error(`Errore nella richiesta ${response.status}`);
+                }
+                const userData = await response.json();
+                return userData.items;
+            }catch(error){
+                console.error('Errore durante la richiesta', error);
+                return [];
+            }
+        }
+
+        async function renderTable(){
+            try{
+                let tbody = "";
+                const albumTableRow = document.getElementById('albumTableRow');
+                const spotifyPlayer = document.getElementById('spotifyPlayer');
+                spotifyPlayer.innerHTML = "";
+                const Album = document.getElementById('Album');
+                Album.innerHTML = "";
+                const jsonRecentAlbum =  await fetchAlbumData();
+                tbody += `<tr>
+                            <th>Autore</th>
+                            <th>Titolo</th>
+                            <th>Copertina</th>
+                            <th>Visualizza album</th>
+                            <th>Riproduci canzone</th>
+                            <th>Visualizza canzoni album</th>
+                        </tr>`;
+                jsonRecentAlbum.forEach(album => {
+                    const jsonArtistData = album.track.artists[0].name;
+                    const jsonAlbumTitle = album.track.name;
+                    const jsonAlbumCover = album.track.album.images[0].url;
+                    const jsonAlbum = album.track.album.name;
+                    const songId = album.track.id;
+                    const AlbumId = album.track.album.id;
+                    
+                    tbody += `<tr>`
+                    tbody += `<td>` + jsonArtistData + `</td>`;
+                    tbody += `<td>` + jsonAlbumTitle + `</td>`;
+                    tbody += `<td><img src="${jsonAlbumCover}" alt="Copertina Album" width="50"></td>`;
+                    tbody += `<td>` + jsonAlbum + `</td>`;
+                    tbody += `<td><button type="button" onclick="playSong('${songId}')">Play</button></td>`;
+                    tbody += `<td><button type="button" onclick="Album('${jsonAlbumCover}','${jsonAlbumTitle}','${songId}','${jsonAlbum}','${AlbumId}')">Dettagli album</button></td>`;
+                    tbody += `</tr>`
+            });
+                
+                const jsonTableRow = document.getElementById('albumTableRow');
+                jsonTableRow.innerHTML += tbody;
+                
+                
+
+  
+
+                } catch(error){
+                     console.error('Errore durante il rendering: ', error);
+                }
+            }
+
+
+        async function Album(jsonAlbumCover,jsonAlbumTitle,AlbumId, jsonAlbum,songId){
+            const jsonTableRow = document.getElementById('albumTableRow');
+            jsonTableRow.innerHTML = "";
+            const a = document.getElementById('Album');
+            a.innerHTML += `<button type="button" onclick="renderTable()">Indietro</button>`;
+            a.innerHTML += `<h1> Dettagli Album </h1>`;
+            a.innerHtml += `<br>`;
+            a.innerHTML += `<img src="${jsonAlbumCover}" alt="Copertina Album" width="200">`;
+            a.innerHtml += `<br>`;
+            a.innerHTML += `<h3> Stai ascoltando la canzone: ${jsonAlbumTitle}</h3>`;
+            playSong(songId, jsonAlbumTitle);
+            a.innerHTML += `<h3> Nome album : ${jsonAlbum}</h3>`;
+            playAlbum(AlbumId, jsonAlbum);
+            console.log(AlbumId)
+            console.log(jsonAlbum)
+
+            
+        }
+
+        async function playSong(songId, jsonAlbumTitle) {
+            const player = document.getElementById('spotifyPlayer');
+            const playerHtml = `
+                <div>
+                        <iframe src="https://open.spotify.com/embed/track/${songId}"
+                                width="300" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media">
+                        </iframe>
+                    </div>
+                `;
+                player.innerHTML = playerHtml;
+        }
+
+        async function playAlbum(AlbumId, jsonAlbum){
+            const player = document.getElementById('albumPlayer');
+            const playerHtml = `
+                <div>
+                    <iframe style="border-radius:12px" 
+                    src="https://open.spotify.com/embed/album/${AlbumId}?utm_source=generator" 
+                    width="100%" height="352" frameBorder="0" allowfullscreen="" 
+                    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                </div>   
+            `;
+                player.innerHTML = playerHtml;
+        }
+        renderTable();
+    </script>
+</body>
+</html>
