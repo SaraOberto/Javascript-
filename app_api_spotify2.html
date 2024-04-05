@@ -20,7 +20,7 @@
     <div id="spotifyPlayer"></div>
         
     <script>
-        var access_token="BQCBeo00W54JX72NIvHaQiFmHjHQSkvk9kwpw71nVhtYcHNkkes7pyC_FBFArgl74Zoabcew3tP8S1muR914QXfEtxzgrPfGG0cfJQlO47aOqF9noPu74s2OCbEYw8YYqsAhki5CBJv3PDkNfVIYc7Ic4i3MihQ5I8UZoKuurKAHyt9L10l9q5krx56JYuUrb9oz_rkFXQJLeotc91JJ8o9E";
+        var access_token="BQCBk1MPYYZU4JOU0GuAysXZ51zwY_y6w-NHJpCfB-YQ34mvbcdvW5EfdsyofBWKGb5napGB9xyNPPtKEHsCbrIkf1b6ZDron0QkLNovbiQ3Xu7Yt3qpv7IvTwK-WTTCk0jNAJ1UAqMAuS50W1tPrEQyUNXn5sUzbIhFMGwyUm41i86prmIxcuLIYOjGbeX31JmpaznMSA8FNfi-uZmE2di1";
 
         async function fetchAlbumData(){
             try{
@@ -49,13 +49,14 @@
                     const jsonAlbumTitle = song.track.name;
                     const jsonAlbumCover = song.track.album.images[0].url;
                     const jsonsongId = song.track.id;
+                    const jsonSongUrl = song.track.external_urls.spotify;
                     
                     
                     tbody += "<tr>"
                     tbody += "<td>" + jsonArtistData + "</td>";
                     tbody += "<td>" + jsonAlbumTitle + "</td>";
                     tbody += `<td><img src="${jsonAlbumCover}" alt="Copertina Album" width="50"></td>`;
-                    tbody += `<td><button class="btn btn-dark" onclick="playSong('${jsonsongId}', '${jsonAlbumTitle}')">Play</button></td>`;
+                    tbody += `<td><a href = ${jsonSongUrl}>`+ jsonAlbumTitle + `</td>`;
                     tbody += "</tr>"
             });
                 
@@ -66,7 +67,7 @@
             }
         }
 
-        async function playSong(selectElement) {
+        async function playSong(songId) {
             const player = document.getElementById('spotifyPlayer');
 
             const playerHtml = `
