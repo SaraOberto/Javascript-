@@ -16,7 +16,7 @@
  
         
     <script>
-        var access_token="BQBV0A3daqiXIvSMIK0c9kfNEEflbnE5UaZvu8CWVrm2SwAbxu9vWXa53O2lZixzPoPR0r3k1_ooWQ27ZyV-6qz0SXbaYVE24LL04HCa_JwW2pPkIK6XSQ3s64w2p0GLSQQdQYyKTeG-uvl3PsDRc9ZrWen_crA7LaP85ZySz8sEzWdPcqoed1Cr1pGQ2sNl7V2jIHSw6riIDQCLe7h3nNaB";
+        var access_token="BQBURGWHmkXXIrUCQhxfV3Pesjs1_k6oyyoHIocZ6Zm-uq1GcUiubPrCczLohWOKCRBvjiiipbtNlf5gMR6Z7SaEwh3OXT_ovPTpKbEcC_wakriBwdZOEMzMps5gdcJmN0aGKLXx0Gh1TQv7OqY4x1nCGbz1caFUq5xLQ9xKDIB9rTZciIdqgYDNfUYYvHWHWD8Dwp44V1HxN_jroQIO40Yy";
         async function fetchAlbumData(){
             try{
                 const response = await fetch(`https://api.spotify.com/v1/me/player/recently-played`, {
@@ -43,6 +43,8 @@
                 spotifyPlayer.innerHTML = "";
                 const Album = document.getElementById('Album');
                 Album.innerHTML = "";
+                const albumPlayer = document.getElementById('albumPlayer');
+                albumPlayer.innerHTML = "";
                 const jsonRecentAlbum =  await fetchAlbumData();
                 tbody += `<tr>
                             <th>Autore</th>
@@ -54,7 +56,7 @@
                         </tr>`;
                 jsonRecentAlbum.forEach(album => {
                     const jsonArtistData = album.track.artists[0].name;
-                    const jsonAlbumTitle = album.track.name;
+                    const jsonSongTitle = album.track.name;
                     const jsonAlbumCover = album.track.album.images[0].url;
                     const jsonAlbum = album.track.album.name;
                     const songId = album.track.id;
@@ -62,47 +64,37 @@
                     
                     tbody += `<tr>`
                     tbody += `<td>` + jsonArtistData + `</td>`;
-                    tbody += `<td>` + jsonAlbumTitle + `</td>`;
+                    tbody += `<td>` + jsonSongTitle + `</td>`;
                     tbody += `<td><img src="${jsonAlbumCover}" alt="Copertina Album" width="50"></td>`;
                     tbody += `<td>` + jsonAlbum + `</td>`;
-                    tbody += `<td><button type="button" onclick="playSong('${songId}')">Play</button></td>`;
-                    tbody += `<td><button type="button" onclick="Album('${jsonAlbumCover}','${jsonAlbumTitle}','${songId}','${jsonAlbum}','${AlbumId}')">Dettagli album</button></td>`;
-                    tbody += `</tr>`
+                    tbody += `<td><button type="button" onclick="playSong('${songId}','${jsonSongTitle}')">Play</button></td>`;
+                    tbody += `<td><button type="button" onclick="Album('${jsonAlbumCover}','${jsonSongTitle}','${songId}','${jsonAlbum}','${AlbumId}')">Dettagli album</button></td>`;
+                    tbody += `</tr>`    
             });
-                
                 const jsonTableRow = document.getElementById('albumTableRow');
                 jsonTableRow.innerHTML += tbody;
-                
-                
-
-  
 
                 } catch(error){
                      console.error('Errore durante il rendering: ', error);
                 }
             }
 
-
-        async function Album(jsonAlbumCover,jsonAlbumTitle,AlbumId, jsonAlbum,songId){
+        async function Album(jsonAlbumCover,jsonSongTitle,songId, jsonAlbum,AlbumId){
             const jsonTableRow = document.getElementById('albumTableRow');
             jsonTableRow.innerHTML = "";
             const a = document.getElementById('Album');
             a.innerHTML += `<button type="button" onclick="renderTable()">Indietro</button>`;
             a.innerHTML += `<h1> Dettagli Album </h1>`;
+            a.innerHTML += `<h3> Nome album : ${jsonAlbum}</h3>`;
             a.innerHtml += `<br>`;
             a.innerHTML += `<img src="${jsonAlbumCover}" alt="Copertina Album" width="200">`;
             a.innerHtml += `<br>`;
-            a.innerHTML += `<h3> Stai ascoltando la canzone: ${jsonAlbumTitle}</h3>`;
-            playSong(songId, jsonAlbumTitle);
-            a.innerHTML += `<h3> Nome album : ${jsonAlbum}</h3>`;
+            a.innerHTML += `<h3> Stai ascoltando la canzone: ${jsonSongTitle}</h3>`;
+            playSong(songId, jsonSongTitle);
             playAlbum(AlbumId, jsonAlbum);
-            console.log(AlbumId)
-            console.log(jsonAlbum)
-
-            
         }
 
-        async function playSong(songId, jsonAlbumTitle) {
+        async function playSong(songId, jsonSongTitle) {
             const player = document.getElementById('spotifyPlayer');
             const playerHtml = `
                 <div>
@@ -112,17 +104,20 @@
                     </div>
                 `;
                 player.innerHTML = playerHtml;
+
         }
 
-        async function playAlbum(AlbumId, jsonAlbum){
+
+       async function playAlbum(AlbumId, jsonAlbum){
             const player = document.getElementById('albumPlayer');
             const playerHtml = `
                 <div>
                     <iframe style="border-radius:12px" 
                     src="https://open.spotify.com/embed/album/${AlbumId}?utm_source=generator" 
                     width="100%" height="352" frameBorder="0" allowfullscreen="" 
-                    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
-                </div>   
+                    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy">
+                    </iframe>
+                </div>      
             `;
                 player.innerHTML = playerHtml;
         }
